@@ -1,51 +1,40 @@
-﻿using System;
-using System.Security.Cryptography;
+using System;
 
 internal class Program
 {
     private static void Main(string[] args)
-    {
-        Console.Write("Wat is je geboorte datum in dag/maand/jaar: ");
+    {   //vraag om de geboorte datum - user input
+        Console.Write("Wat is je geboorte datum in maand/dag/jaar: ");
+        
+        //verkregen verjaardag
         var dataVerjaardag = Console.ReadLine();
-        DateTime dt;
-
         var verjaardag = DateTime.Parse(dataVerjaardag);
-
-
+        
+        //verkrijgen van de datum heden
         var dateNu = DateTime.Now;
-       
 
-        TimeSpan verschil = dateNu - verjaardag;
+        //hoeveel dagen leeft iemand
+        TimeSpan verschil = (dateNu - verjaardag);
         var dagen = verschil.Days;
         
-       
-        decimal dagen2 = verschil.Days;
-        var VerKdag = Math.Ceiling(dagen2 / 1000);
-
+        //resten berekenen
+        var x = (dagen % 1000);
+        
+        //tellen hoeveel dagen tot de volgende verKdag
         var Count = 0;
-        var x = dagen % 1000;
 
-        while(x < 1000)
-        {
+        while(x < 1000) {
             x += 1;
             Count += 1;
-
-
         }
-
+        
+        //andere naam geven
         dagen = Count;
+        
+        //Het optellen van de datum plus aantal dagen tot verKdag
         DateTime b = dateNu.AddDays(dagen);
 
+        Console.Write($"Over {dagen} dagen op {b} is je verKdag!");
 
-
-
-  
-        
-      
-
-
-        Console.Write($"Over {dagen} dagen op ");
-        Console.Write(b);
-        Console.Write($" is het je {VerKdag} de/ste verKdag!  ");
     }
 }
