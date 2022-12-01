@@ -20,7 +20,7 @@ tekst = Label(scherm)
 tekst.place(x=10, y=10)
 tekst.configure(text="Midden x:", font=("Arial", 18))
 
-mx = invoer = Entry(scherm)
+InvoerMiddenX = invoer = Entry(scherm)
 invoer.place(x=100, y=10)
 invoer.configure(width=10)
 
@@ -29,7 +29,7 @@ tekst = Label(scherm)
 tekst.place(x=10, y=40)
 tekst.configure(text="midden y:", font=("Arial", 18))
 
-my = invoer = Entry(scherm)
+InvoerMiddenY = invoer = Entry(scherm)
 invoer.place(x=100, y=40)
 invoer.configure(width=10)
 
@@ -38,7 +38,7 @@ tekst = Label(scherm)
 tekst.place(x=10, y=70)
 tekst.configure(text="schaal:", font=("Arial", 18))
 
-s = invoer = Entry(scherm)
+InvoerSchaal = invoer = Entry(scherm)
 invoer.place(x=100, y=70)
 invoer.configure(width=10)
 
@@ -47,7 +47,7 @@ tekst = Label(scherm)
 tekst.place(x=10, y=100)
 tekst.configure(text="iteraties:", font=("Arial", 18))
 
-w = invoer = Entry(scherm)
+InvoerIteraties = invoer = Entry(scherm)
 invoer.place(x=100, y=100)
 invoer.configure(width=10)
 
@@ -57,15 +57,7 @@ knop.place(x=240,y=10)
 knop.configure(text="Bereken",font=("Arial, 18"),height=5,width=10)
 
 #Setup van mandelbrot plaatje
-xbegin = -2.0
-xwidth = 3
-ystart = -1.5
-yheight = 3
-maxIt = 50 # max iterations allowed
-Pixelscale = 200
-
-image_width = int(Pixelscale*xwidth)
-image_height = int(Pixelscale*yheight)
+maxIt = 20 # max iterations allowed
 
 # Afbeelding van Mandelbrot
 width_x= 400
@@ -74,9 +66,6 @@ height_y = 400
 afbeelding = Label(scherm) 
 afbeelding.place(x=10,y=140) 
 
-plaatje = Image.new(mode="RGB", size=(image_width,image_height))
-draw = Draw(plaatje)
-    
 def calc(c1, c2):
     x = y = 0
     for i in range(maxIt):
@@ -85,29 +74,34 @@ def calc(c1, c2):
             return i+1
     return 0
 
-for row in range(image_width):
-    c1 = xbegin + row/Pixelscale
-    for col in range(image_height):
-        c2 = ystart + col/Pixelscale
-        v = calc(c1, c2)
-        if v:
-            plaatje.putpixel((row, col), (255,255,0))
+def teken(schaal):
+    plaatje = Image.new(mode="RGB", size=(width_x,height_y))
+    draw = Draw(plaatje)
+    for row in range(width_x):
+        c1 = (row-200) * schaal
+        for col in range(height_y):
+            c2 = (col-200) * schaal
+            v = calc(c1,c2)
+            if v:
+              plaatje.putpixel((row, col), (255,255,0))        
+    global omgezetPlaatje
+    omgezetPlaatje = PhotoImage(plaatje)
+    afbeelding.configure(image=omgezetPlaatje)
 
-
+def bereken():
     
-omgezetPlaatje = PhotoImage(plaatje)
-afbeelding.configure(image=omgezetPlaatje)
-
-#def bereken():
-# p=mx.get()
-# l=my.get()
-# k=s.get()
-# m=w.get()
+    CoordinaatX = InvoerMiddenX.get()
+    CoordinaatY=InvoerMiddenY.get()
+    schaal=InvoerSchaal.get()
+    Iter=InvoerIteraties.get()
+        
+    print(CoordinaatX)
+    print(CoordinaatY)
+    print(schaal)
+    print(Iter)
  
-# print(p)
-# print(l)
-# print(k)
-# print(m)
+    teken(float(schaal))
  
-#knop.configure(command=bereken)
+knop.configure(command=bereken)
+teken(0.01)
 scherm.mainloop()
