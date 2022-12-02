@@ -1,14 +1,10 @@
-#python3.11 -m venv "virtual omgeving"
-#source virtual/bin/activate
-#pip3 install "library"
-
 #Zilon Huang & Joran Middelman
 
 from tkinter import Frame, Label, Entry, Tk, Button
-import math
 from PIL.ImageDraw import Draw
 from PIL.ImageTk import PhotoImage 
 from PIL import Image
+import math
 
 #initialise the window
 scherm = Tk()
@@ -16,55 +12,31 @@ scherm.geometry("420x550")
 scherm.title("Mandelbrot")
 
 #setup of midden x:
-tekst = Label(scherm)
-tekst.place(x=10, y=10)
-tekst.configure(text="Midden x:", font=("Arial", 18))
-
-InvoerMiddenX = invoer = Entry(scherm)
-invoer.place(x=100, y=10)
-invoer.configure(width=10)
+tekst = Label(scherm); tekst.place(x=10, y=10); tekst.configure(text="Midden x:", font=("Arial", 18))
+InvoerMiddenX = invoer = Entry(scherm); invoer.place(x=100, y=10); invoer.configure(width=10)
 
 #setup of midden y:
-tekst = Label(scherm)
-tekst.place(x=10, y=40)
-tekst.configure(text="midden y:", font=("Arial", 18))
-
-InvoerMiddenY = invoer = Entry(scherm)
-invoer.place(x=100, y=40)
-invoer.configure(width=10)
+tekst = Label(scherm); tekst.place(x=10, y=40); tekst.configure(text="midden y:", font=("Arial", 18))
+InvoerMiddenY = invoer = Entry(scherm) ;invoer.place(x=100, y=40) ;invoer.configure(width=10)
 
 #setup of schaal:
-tekst = Label(scherm)
-tekst.place(x=10, y=70)
-tekst.configure(text="schaal:", font=("Arial", 18))
-
-InvoerSchaal = invoer = Entry(scherm)
-invoer.place(x=100, y=70)
-invoer.configure(width=10)
+tekst = Label(scherm); tekst.place(x=10, y=70); tekst.configure(text="schaal:", font=("Arial", 18))
+InvoerSchaal = invoer = Entry(scherm); invoer.place(x=100, y=70); invoer.configure(width=10)
 
 #setup of iterations:
-tekst = Label(scherm)
-tekst.place(x=10, y=100)
-tekst.configure(text="iteraties:", font=("Arial", 18))
-
-InvoerIteraties = invoer = Entry(scherm)
-invoer.place(x=100, y=100)
-invoer.configure(width=10)
+tekst = Label(scherm); tekst.place(x=10, y=100); tekst.configure(text="iteraties:", font=("Arial", 18))
+InvoerIteraties = invoer = Entry(scherm); invoer.place(x=100, y=100); invoer.configure(width=10)
 
 #setup van de knop
-knop = Button(scherm)
-knop.place(x=240,y=10)
-knop.configure(text="Bereken",font=("Arial, 18"),height=5,width=10)
-
-#Setup van mandelbrot plaatje
-maxIt = 20 # max iterations allowed
+knop = Button(scherm); knop.place(x=240,y=10); knop.configure(text="Bereken",font=("Arial, 18"),height=5,width=10)
 
 # Afbeelding van Mandelbrot
-width_x= 400
-height_y = 400
-
 afbeelding = Label(scherm) 
-afbeelding.place(x=10,y=140) 
+afbeelding.place(x=10,y=140)
+# Aantal pixels in de x en y richting
+width_x, height_y = 400, 400
+# Declaratie van globale variables
+maxIt = 20 # max iterations allowed
 
 def calc(c1, c2):
     x = y = 0
@@ -77,19 +49,20 @@ def calc(c1, c2):
 def teken(schaal):
     plaatje = Image.new(mode="RGB", size=(width_x,height_y))
     draw = Draw(plaatje)
+    
     for row in range(width_x):
         c1 = (row-200) * schaal
         for col in range(height_y):
             c2 = (col-200) * schaal
             v = calc(c1,c2)
             if v:
-              plaatje.putpixel((row, col), (255,255,0))        
+              plaatje.putpixel((row, col), (255,255,0))
+              
     global omgezetPlaatje
     omgezetPlaatje = PhotoImage(plaatje)
     afbeelding.configure(image=omgezetPlaatje)
 
 def bereken():
-    
     CoordinaatX = InvoerMiddenX.get()
     CoordinaatY=InvoerMiddenY.get()
     schaal=InvoerSchaal.get()
@@ -105,3 +78,11 @@ def bereken():
 knop.configure(command=bereken)
 teken(0.01)
 scherm.mainloop()
+
+# if(mandelnummer % 2 != 0):
+#                 plaatje.putpixel((row, col), (0 , 0, 0))
+#             else:
+#                 hue = int(255 * mandelnummer / maxIt)
+#                 saturation = 255
+#                 value = 255 if mandelnummer < maxIt else 0
+#             plaatje.putpixel((row, col),(hue, saturation, value))  
