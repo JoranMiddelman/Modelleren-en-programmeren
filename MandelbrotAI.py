@@ -14,19 +14,19 @@ scherm.pack()
 
 #setup of midden x:
 tekst = Label(scherm, text="Midden x:", font=("Arial", 18)); tekst.place(x=10, y=10);
-InvoerMiddenX  = Entry(scherm, width=10); InvoerMiddenX.place(x=100, y=10);
+InvoerMiddenX  = Entry(scherm, width=10); InvoerMiddenX.place(x=100, y=10); InvoerMiddenX.insert(0,str(0));
 
 #setup of midden y:
 tekst = Label(scherm, text="midden y:", font=("Arial", 18)); tekst.place(x=10, y=40);
-InvoerMiddenY = Entry(scherm, width=10); InvoerMiddenY.place(x=100, y=40);
+InvoerMiddenY = Entry(scherm, width=10); InvoerMiddenY.place(x=100, y=40); InvoerMiddenY.insert(0,str(0));
 
 #setup of schaal:
 tekst = Label(scherm, text="schaal:", font=("Arial", 18)); tekst.place(x=10, y=70);
-InvoerSchaal = Entry(scherm, width=10); InvoerSchaal.place(x=100, y=70);
+InvoerSchaal = Entry(scherm, width=10); InvoerSchaal.place(x=100, y=70); InvoerSchaal.insert(0,str(0.005));
 
 #setup of iterations:
 tekst = Label(scherm, text="iteraties:", font=("Arial", 18)); tekst.place(x=10, y=100);
-InvoerIteraties = Entry(scherm, width=10); InvoerIteraties.place(x=100, y=100);
+InvoerIteraties = Entry(scherm, width=10); InvoerIteraties.place(x=100, y=100); InvoerIteraties.insert(0,str(6));
 
 #setup van de knop
 knop = Button(scherm, text="Bereken", font=("Arial, 18"), height=5,width=10); knop.place(x=240,y=10);
