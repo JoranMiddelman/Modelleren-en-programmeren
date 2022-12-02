@@ -36,11 +36,11 @@ afbeelding = Label(scherm); afbeelding.place(x=10,y=140)
 # Aantal pixels in de x en y richting
 width_x, height_y = 400, 400
 
-def calc(c1, c2):
-    x = y = 0
+def calc(x, y):
+    a = b = 0
     for i in range(maxIt):
-        x, y = x*x - y*y + c1, 2*x*y + c2
-        if x*x + y*y > 4:
+        a, b = a*a - b*b + x, 2*a*b + y
+        if a*a + b*b > 4:
             return i+1
     return 0
 
@@ -49,10 +49,10 @@ def teken():
     draw = Draw(plaatje)
     
     for row in range(width_x):
-        c1 = (row-200) * schaal + CoordinaatX
+        x = (row-200) * schaal + CoordinaatX
         for col in range(height_y):
-            c2 = (col-200) * schaal + CoordinaatY
-            v = calc(c1,c2)
+            y = (col-200) * schaal + CoordinaatY
+            v = calc(x,y)
             if v:
               plaatje.putpixel((row, col), (255,255,0))
               
