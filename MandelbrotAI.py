@@ -7,36 +7,34 @@ from PIL import Image
 import math
 
 #initialise the window
-scherm = Tk()
-scherm.geometry("420x550")
-scherm.title("Mandelbrot")
+scherm = Frame() #Setting up frame
+scherm.master.title("Mandelbrot")
+scherm.configure(width=420,height=550)
+scherm.pack()
 
 #setup of midden x:
-tekst = Label(scherm); tekst.place(x=10, y=10); tekst.configure(text="Midden x:", font=("Arial", 18))
-InvoerMiddenX = invoer = Entry(scherm); invoer.place(x=100, y=10); invoer.configure(width=10)
+tekst = Label(scherm, text="Midden x:", font=("Arial", 18)); tekst.place(x=10, y=10);
+InvoerMiddenX  = Entry(scherm, width=10); InvoerMiddenX.place(x=100, y=10);
 
 #setup of midden y:
-tekst = Label(scherm); tekst.place(x=10, y=40); tekst.configure(text="midden y:", font=("Arial", 18))
-InvoerMiddenY = invoer = Entry(scherm) ;invoer.place(x=100, y=40) ;invoer.configure(width=10)
+tekst = Label(scherm, text="midden y:", font=("Arial", 18)); tekst.place(x=10, y=40);
+InvoerMiddenY = Entry(scherm, width=10); InvoerMiddenY.place(x=100, y=40);
 
 #setup of schaal:
-tekst = Label(scherm); tekst.place(x=10, y=70); tekst.configure(text="schaal:", font=("Arial", 18))
-InvoerSchaal = invoer = Entry(scherm); invoer.place(x=100, y=70); invoer.configure(width=10)
+tekst = Label(scherm, text="schaal:", font=("Arial", 18)); tekst.place(x=10, y=70);
+InvoerSchaal = Entry(scherm, width=10); InvoerSchaal.place(x=100, y=70);
 
 #setup of iterations:
-tekst = Label(scherm); tekst.place(x=10, y=100); tekst.configure(text="iteraties:", font=("Arial", 18))
-InvoerIteraties = invoer = Entry(scherm); invoer.place(x=100, y=100); invoer.configure(width=10)
+tekst = Label(scherm, text="iteraties:", font=("Arial", 18)); tekst.place(x=10, y=100);
+InvoerIteraties = Entry(scherm, width=10); InvoerIteraties.place(x=100, y=100);
 
 #setup van de knop
-knop = Button(scherm); knop.place(x=240,y=10); knop.configure(text="Bereken",font=("Arial, 18"),height=5,width=10)
+knop = Button(scherm, text="Bereken", font=("Arial, 18"), height=5,width=10); knop.place(x=240,y=10);
 
 # Afbeelding van Mandelbrot
-afbeelding = Label(scherm) 
-afbeelding.place(x=10,y=140)
+afbeelding = Label(scherm); afbeelding.place(x=10,y=140)
 # Aantal pixels in de x en y richting
 width_x, height_y = 400, 400
-# Declaratie van globale variables
-maxIt = 20 # max iterations allowed
 
 def calc(c1, c2):
     x = y = 0
@@ -46,14 +44,14 @@ def calc(c1, c2):
             return i+1
     return 0
 
-def teken(schaal):
+def teken():
     plaatje = Image.new(mode="RGB", size=(width_x,height_y))
     draw = Draw(plaatje)
     
     for row in range(width_x):
-        c1 = (row-200) * schaal
+        c1 = (row-200) * schaal + CoordinaatX
         for col in range(height_y):
-            c2 = (col-200) * schaal
+            c2 = (col-200) * schaal + CoordinaatY
             v = calc(c1,c2)
             if v:
               plaatje.putpixel((row, col), (255,255,0))
@@ -62,21 +60,28 @@ def teken(schaal):
     omgezetPlaatje = PhotoImage(plaatje)
     afbeelding.configure(image=omgezetPlaatje)
 
+# Declaratie van globale variables
+CoordinaatX = 0; CoordinaatY = 0;schaal = 0; maxIt = 0
+
 def bereken():
-    CoordinaatX = InvoerMiddenX.get()
-    CoordinaatY=InvoerMiddenY.get()
-    schaal=InvoerSchaal.get()
-    Iter=InvoerIteraties.get()
+    global CoordinaatX, CoordinaatY,schaal,maxIt
+    try:
+        CoordinaatX = float(InvoerMiddenX.get())
+        CoordinaatY= float(InvoerMiddenY.get())
+        schaal=float(InvoerSchaal.get())
+        maxIt=int(InvoerIteraties.get())
+        teken()
+    except:
+        CoordinaatX = 0.0
+        CoordinaatY= 0.0
+        schaal= 0.00
+        maxIt= 0
+        teken()
         
-    print(CoordinaatX)
-    print(CoordinaatY)
-    print(schaal)
-    print(Iter)
- 
-    teken(float(schaal))
- 
 knop.configure(command=bereken)
-teken(0.01)
+
+bereken()
+
 scherm.mainloop()
 
 # if(mandelnummer % 2 != 0):
