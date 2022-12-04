@@ -1,7 +1,7 @@
 #Zilon Huang & Joran Middelman
 
 #import benodigde libraries
-from tkinter import Frame, Label, Entry, Tk, Button, StringVar, OptionMenu, DoubleVar, Text
+from tkinter import *
 from PIL.ImageDraw import Draw
 from PIL.ImageTk import PhotoImage 
 from PIL import Image
@@ -10,7 +10,7 @@ import math
 #initialise the window
 scherm = Frame() #Setting up frame
 scherm.master.title("Mandelbrot")
-scherm.configure(width=660,height=550)
+scherm.configure(width=620,height=550)
 scherm.pack()
 
 #setup of midden x:
@@ -23,7 +23,7 @@ InvoerMiddenY = Entry(scherm, width=10); InvoerMiddenY.place(x=100, y=40); Invoe
 
 #setup of schaal:
 tekst = Label(scherm, text="schaal:", font=("Arial", 18)); tekst.place(x=10, y=70);
-InvoerSchaal = Entry(scherm, width=10); InvoerSchaal.place(x=100, y=70); InvoerSchaal.insert(0,str(0.01));
+InvoerSchaal = Entry(scherm, width=10); InvoerSchaal.place(x=100, y=70); InvoerSchaal.insert(0,str(1e-2));
 
 #setup of iterations:
 tekst = Label(scherm, text="iteraties:", font=("Arial", 18)); tekst.place(x=10, y=100);
@@ -64,7 +64,7 @@ def keuze():
         InvoerMiddenX.insert(0,str(-0.2))
         InvoerMiddenY.insert(0,str(-0.65))
         InvoerIteraties.insert(0,str(400))
-        InvoerSchaal.insert(0,str(0.00001))
+        InvoerSchaal.insert(0,str(1e-5))
     
 options = [ 
            "Plaatje0",
@@ -91,7 +91,7 @@ Bereken.'''
 Uitleg = Text(scherm, height=8, width=35)
 Uitleg.insert('end', text)
 Uitleg.config(state='disabled')
-Uitleg.place(x=360,y=10)
+Uitleg.place(x=360,y=13)
 
 # Afbeelding van Mandelbrot
 afbeelding = Label(scherm); afbeelding.place(x=10,y=140)
@@ -107,8 +107,8 @@ def calc(x, y):
         a, b = a*a - b*b + x, 2*a*b + y # functie van de opgave
         mandelgetal += 1 # Het mandelgetal van aantal keer dat f is toegepast
         
-    # if mandelgetal == 1: # Conditie als het mandel getal al 1 is dan geeft hij gelijk 1 terug
-    #     return 1
+    if mandelgetal == 1: # Conditie als het mandel getal al 1 is dan geeft hij gelijk 1 terug
+         return 1
     if mandelgetal == maxIt: # Conditie als mandelgetal oneindig is dan stoppen we met het toepassen van de functie en zetten we het mandelgetal op max iteraites
         return maxIt
     else:
@@ -135,7 +135,7 @@ def teken():
 
     global omgezetPlaatje
     omgezetPlaatje = PhotoImage(plaatje)
-    afbeelding.configure(image=omgezetPlaatje)
+    afbeelding.configure(image=omgezetPlaatje)  
 
 # Declaratie van globale variables
 CoordinaatX = 0; CoordinaatY = 0;schaal = 0; maxIt = 0
@@ -154,20 +154,18 @@ def bereken(): # functie vraagt de input van de gebruiker en pas ze toe in de fu
         schaal= 0.00
         maxIt= 0
         teken()
-        
-# def left(event):
-#     pointxy = (event.x, event.y) # get the mouse position from event
-#     x = (pointxy[0]-200) * schaal + CoordinaatX 
-#     y = (pointxy[1]-200) * schaal + CoordinaatY
-#     print(pointxy)
 
-# def Mousecoords(event):
-#     pointxy = (event.x, event.y) # get the mouse position from event
-#     scherm.canvas.coords(omgezetPlaatje, pointxy) # move the image to mouse postion
+#Probleem, kan niet op scherm klikken
+def left(event):
+    global x; global y; global schaal
+    pointxy = (event.x, event.y) # get the mouse position from event
+    x = (pointxy[0]-200) * schaal + CoordinaatX 
+    y = (pointxy[1]-200) * schaal + CoordinaatY
+    schaal *= 1.5 
+    print(pointxy)
 
-# scherm.bind('<Button-1>', left) # track mouse movement
-        
-        
+scherm.bind('<Button-1>', left) # track mouse movement
+
 knop.configure(command=bereken)
 
 bereken()
