@@ -114,6 +114,7 @@ def calc(x, y):
     else:
         return mandelgetal # Als de vorige niet voordoen dan is het mandelgetal tussen 1 en maxIt
 
+
 def teken():
     plaatje = Image.new(mode="RGB", size=(width_x,height_y))
     draw = Draw(plaatje)
@@ -128,10 +129,10 @@ def teken():
                 plaatje.putpixel((row, col), (0 , 0, 0))
             else:
                 plaatje.putpixel((row, col), (255 , 255, 255))
-        hue = int(255 * v / maxIt)
-        saturation = 255
-        value = 255 if v < maxIt else 0
-        plaatje.putpixel((row, col),(hue, saturation, value))  
+                hue = int(255 * v / maxIt)
+                saturation = 255
+                value = 255 if v < maxIt else 0
+                plaatje.putpixel((row, col),(hue, saturation, value))  
 
     global omgezetPlaatje
     omgezetPlaatje = PhotoImage(plaatje)
@@ -155,6 +156,37 @@ def bereken(): # functie vraagt de input van de gebruiker en pas ze toe in de fu
         maxIt= 0
         teken()
 
+tekst = Label(scherm, text="Kleur aanpas slider", font='Arial 18 bold'); tekst.place(x=420, y=260);
+
+tekst = Label(scherm, text="Red", font=("Arial", 18)); tekst.place(x=530, y=315);
+sliderRed = Scale(scherm, from_ = 0, to=255, orient=HORIZONTAL)
+sliderRed.place(x=420,y=300)
+
+tekst = Label(scherm, text="Green", font=("Arial", 18)); tekst.place(x=530, y=355);
+sliderGreen = Scale(scherm, from_ = 0, to=255, orient=HORIZONTAL)
+sliderGreen.place(x=420,y=340)
+
+tekst = Label(scherm, text="Blue", font=("Arial", 18)); tekst.place(x=530, y=395);
+sliderBlue = Scale(scherm, from_ = 0, to=255, orient=HORIZONTAL)
+sliderBlue.place(x=420,y=380)
+
+# Declaratie van globale variablen
+# Red = 255; Green = 255; Blue = 255
+
+# def slider_value():
+#     global Red, Green, Blue
+#     if Red > 0 and Green > 0 and Blue > 0:
+#         try:
+#             Red = sliderRed.get()
+#             Green = sliderGreen.get()
+#             Blue = sliderBlue.get()
+#             teken()
+#         except:
+#             Red = 0
+#             Green = 0 
+#             Blue = 0
+#             teken()
+
 #Probleem, kan niet op scherm klikken
 def left(event):
     global x; global y; global schaal
@@ -167,6 +199,7 @@ def left(event):
 scherm.bind('<Button-1>', left) # track mouse movement
 
 knop.configure(command=bereken)
+# knop.configure(command=slider_value)
 
 bereken()
 
