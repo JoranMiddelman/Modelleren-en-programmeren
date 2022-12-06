@@ -75,9 +75,6 @@ options = [
 clicked = StringVar()
 clicked.set("Selecteer een plaatje")
 
-drop = OptionMenu(scherm, clicked, *options); drop.place(x=420, y=140)
-myButton = Button(scherm, text="Plaats de gekozen plaatje",command=keuze); myButton.place(x=417, y=165)
-
 # Uitleg box
 text='''Vul eigen waardes in, 
 klik dan op: Bereken.
@@ -230,6 +227,9 @@ def right(event): # Definitie voor rechtermuisklik
 
 afbeelding.bind('<Button-1>', left) # Doet iets als de linkermuisklik wordt gedrukt
 afbeelding.bind('<Button-2>', right) #Doet iets als rechtermuisklik wordt geactiveerd
+
+drop = OptionMenu(scherm, clicked, *options); drop.place(x=420, y=140)
+myButton = Button(scherm, text="Plaats de gekozen plaatje",command=keuze); myButton.place(x=417, y=165)
 
 knop.configure(command=bereken) # Knop bereken doet iets als het wordt ingedrukt
 
