@@ -32,16 +32,16 @@ InvoerIteraties = Entry(scherm, width=10); InvoerIteraties.place(x=100, y=100); 
 #setup van de knop
 knop = Button(scherm, text="Bereken", font=("Arial, 18"), height=5,width=10); knop.place(x=210,y=10);
 
-#setup van de optie menu
+#setup van de keuze menu van de vooraf bepaalde plaatjes
 def keuze():
     a = clicked.get()
     if a == options[0]:
-        InvoerMiddenX.delete(0, 'end')
+        InvoerMiddenX.delete(0, 'end') # verwijderd de input van de vorige invoer
         InvoerMiddenY.delete(0, 'end')
         InvoerIteraties.delete(0, 'end')
         InvoerSchaal.delete(0, 'end')
 
-        InvoerMiddenX.insert(0,str(-0.40))
+        InvoerMiddenX.insert(0,str(-0.40)) # kent de waarde toe aan de entry 
         InvoerMiddenY.insert(0,str(-0.65))
         InvoerIteraties.insert(0,str(400))
         InvoerSchaal.insert(0,str(1e-3))
@@ -78,7 +78,7 @@ clicked.set("Selecteer een plaatje")
 drop = OptionMenu(scherm, clicked, *options); drop.place(x=420, y=140)
 myButton = Button(scherm, text="Plaats de gekozen plaatje",command=keuze); myButton.place(x=417, y=165)
 
-# Uitleg
+# Uitleg box
 text='''Vul eigen waardes in, 
 klik dan op: Bereken.
 
@@ -114,7 +114,6 @@ def calc(x, y):
     else:
         return mandelgetal # Als de vorige niet voordoen dan is het mandelgetal tussen 1 en maxIt
 
-
 def teken():
     plaatje = Image.new(mode="RGB", size=(width_x,height_y))
     draw = Draw(plaatje)
@@ -122,16 +121,16 @@ def teken():
     for row in range(width_x):
         x = (row-200) * schaal + CoordinaatX
         for col in range(height_y):
-            y = (col-200) * schaal + CoordinaatY
+            y = (col-200) * schaal - CoordinaatY
             
             v = calc(x,y)
             if(v % 2 != 0):
                 plaatje.putpixel((row, col), (0 , 0, 0))
             else:
                 plaatje.putpixel((row, col), (255 , 255, 255))
-                hue = int(255 * v / maxIt)
-                saturation = 255
-                value = 255 if v < maxIt else 0
+                hue = int(Red * v / maxIt)
+                saturation = Green
+                value = Blue if v < maxIt else 0
                 plaatje.putpixel((row, col),(hue, saturation, value))  
 
     global omgezetPlaatje
@@ -139,7 +138,7 @@ def teken():
     afbeelding.configure(image=omgezetPlaatje)  
 
 # Declaratie van globale variables
-CoordinaatX = 0; CoordinaatY = 0;schaal = 0; maxIt = 0
+CoordinaatX = 0; CoordinaatY = 0; schaal = 0; maxIt = 0
 
 def bereken(): # functie vraagt de input van de gebruiker en pas ze toe in de functie teken()
     global CoordinaatX, CoordinaatY,schaal,maxIt
@@ -170,37 +169,72 @@ tekst = Label(scherm, text="Blue", font=("Arial", 18)); tekst.place(x=530, y=395
 sliderBlue = Scale(scherm, from_ = 0, to=255, orient=HORIZONTAL)
 sliderBlue.place(x=420,y=380)
 
-# Declaratie van globale variablen
-# Red = 255; Green = 255; Blue = 255
+#Probleem moet iets met aparte functies.  Slider en tekenen van de voorbeeld plaatjes heeft problemen.
 
-# def slider_value():
-#     global Red, Green, Blue
-#     if Red > 0 and Green > 0 and Blue > 0:
-#         try:
-#             Red = sliderRed.get()
-#             Green = sliderGreen.get()
-#             Blue = sliderBlue.get()
-#             teken()
-#         except:
-#             Red = 0
-#             Green = 0 
-#             Blue = 0
-#             teken()
+# Declaratie van globale variabelen 
+Red = 255; Green = 255; Blue = 255
 
-#Probleem, kan niet op scherm klikken
-def left(event):
+def slider_value():
+    global Red, Green, Blue
+    # if Red > 0 and Green > 0 and Blue > 0:
+    try:
+        Red = sliderRed.get()
+        Green = sliderGreen.get()
+        Blue = sliderBlue.get()
+        teken()
+    except:
+        Red = 0
+        Green = 0 
+        Blue = 0
+        teken()
+
+def left(event): #Definitie voor een linkermuisklik 
     global x; global y; global schaal
-    pointxy = (event.x, event.y) # get the mouse position from event
-    x = (pointxy[0]-200) * schaal + CoordinaatX 
-    y = (pointxy[1]-200) * schaal + CoordinaatY
-    schaal *= 1.5 
+    pointxy = (event.x, event.y) # Opvragen van de positie van de muis
     print(pointxy)
+    
+    x = (pointxy[0] - 200) * schaal + CoordinaatX #Het vervangen van de coordinaten met de coordinaten van de muis
+    
+    InvoerMiddenX.delete(0, "end")
+    InvoerMiddenX.insert(0,str(x)) 
+    
+    y = (pointxy[1] + 200) * schaal + CoordinaatY
+    
+    InvoerMiddenY.delete(0, "end")
+    InvoerMiddenY.insert(0, str(y))
+    
+    schaal /= 1.5 #Schaalvergroting
+    InvoerSchaal.delete(0,"end")
+    InvoerSchaal.insert(0, str(schaal))
+    teken()
+    
+def right(event): # Definitie voor rechtermuisklik
+    global x; global y; global schaal
+    pointxy = (event.x, event.y)
+    print(pointxy)
+    
+    x = (pointxy[0] + 200) * schaal * CoordinaatX
+    
+    InvoerMiddenX.delete(0, "end")
+    InvoerMiddenX.insert(0,str(x)) 
+    
+    y = (pointxy[1] - 200) * schaal * CoordinaatY
+    
+    InvoerMiddenY.delete(0, "end")
+    InvoerMiddenY.insert(0, str(y))
 
-scherm.bind('<Button-1>', left) # track mouse movement
+    schaal *= 1.5 # Schaalverkleining
+    InvoerSchaal.delete(0,"end")
+    InvoerSchaal.insert(0, str(schaal))
+    teken()
 
-knop.configure(command=bereken)
-# knop.configure(command=slider_value)
+afbeelding.bind('<Button-1>', left) # Doet iets als de linkermuisklik wordt gedrukt
+afbeelding.bind('<Button-2>', right) #Doet iets als rechtermuisklik wordt geactiveerd
 
-bereken()
+knop.configure(command=bereken) # Knop bereken doet iets als het wordt ingedrukt
+
+#knop.configure(command=slider_value) # Het verkrijgen van de waarde van de sliders
+
+bereken() # activeert de functie voor het tekenen van de mandelbrot een keer
 
 scherm.mainloop()
