@@ -1,5 +1,10 @@
 #Zilon Huang & Joran Middelman
 
+# python3.11 -m venv library
+# source library/bin/activate
+# pip3 install --upgrade pip
+# pip install pillow
+
 #Import benodigde libraries
 from tkinter import *
 from PIL.ImageDraw import Draw
