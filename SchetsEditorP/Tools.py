@@ -117,3 +117,24 @@ class GumTool(PenTool):
 
     def Bezig(self, draw, p1, p2):
         draw.line((p1,p2), fill="white", width=7)
+        
+    # Het toevoegen van een nieuwe class voor het maken van een eerst open en dan een gevulde ovaal
+class OvaalTool(TweepuntTool):
+    def __init__(self):
+        super().__init__()
+    
+    def __str__(self):
+        return "open-ovaal"
+    
+    def Bezig(self, draw, p1, p2):
+        draw.ellipse((p1,p2), outline=self.kwast)
+    
+class VolOvaalTool(OvaalTool):
+    def __init__(self):
+        super().__init__()
+    
+    def __str__(self):
+        return "gevulde-ovaal"
+    
+    def Compleet(self, draw, p1, p2):
+        draw.ellipse((p1, p2), fill=self.kwast)

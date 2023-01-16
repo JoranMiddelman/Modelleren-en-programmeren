@@ -2,14 +2,18 @@ from tkinter       import Toplevel, Menu, Frame, Label, Button, Radiobutton, Lis
 from PIL.ImageTk   import PhotoImage
 from PIL           import Image
 from SchetsControl import SchetsControl
-from Tools         import PenTool, LijnTool, RechthoekTool, VolRechthoekTool, TekstTool, GumTool
+
+# subklasses OvaalTool() VolOvaalTool() importeren
+from Tools         import PenTool, LijnTool, RechthoekTool, VolRechthoekTool, TekstTool, GumTool, OvaalTool, VolOvaalTool
 
 class SchetsWin(Toplevel):
     def __init__(self,parent):
         super().__init__(parent)
-        self.geometry("800x600")
+        # Groter maken om alles in een scherm te krijgen
+        self.geometry("1000x800")
 
-        deTools = [PenTool(), LijnTool(), RechthoekTool(), VolRechthoekTool(), TekstTool(), GumTool()]
+        # toevoegen van OvaalTool() en VolOvaalTool() aan deTools lijst om te laten verschijnen op scherm
+        deTools = [PenTool(), LijnTool(), RechthoekTool(), VolRechthoekTool(), TekstTool(), GumTool(), OvaalTool(), VolOvaalTool()]
         deKleuren = ["black", "red", "green", "blue", "yellow", "magenta", "cyan"]
 
         self.huidigeTool = deTools[0]
@@ -100,6 +104,10 @@ class SchetsWin(Toplevel):
         clear.pack(pady=5)
         roteer = Button(box, text="Rotate", command=self.schetscontrol.Roteer)
         roteer.pack(pady=5)
+        
+        # toevoegen van opslaan en exporteren van plaatje naar bureaublad
+        Opslaan = Button(box, text="Opslaan", command=self.schetscontrol.Opslaan)
+        Opslaan.pack(pady=5)
 
     def maakToolButtons(self, box, tools):
         t = 0

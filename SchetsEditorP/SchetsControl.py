@@ -1,6 +1,7 @@
-from tkinter import Label
+from tkinter import Label, filedialog
 from Schets import Schets
-
+from PIL import ImageGrab
+            
 class SchetsControl(Label):
     def __init__(self,parent):
         super().__init__(parent)
@@ -27,3 +28,7 @@ class SchetsControl(Label):
 
     def VeranderKleur(self, k):
         self.kleur = k
+
+      # opslaan van afbeelding
+    def Opslaan(self):
+        self.afbeeldingnaam = filedialog.asksaveasfile(initialfile="naam.png", defaultextension="png", filetypes=[("PNG",".png"),("JPG",".jpg"),("BMP",".bmp")])
