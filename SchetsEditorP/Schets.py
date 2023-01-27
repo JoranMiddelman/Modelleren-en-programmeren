@@ -2,7 +2,6 @@ from PIL.ImageDraw import Draw
 from PIL.ImageTk   import PhotoImage
 from PIL           import Image
 
-
 class Schets:
     def __init__(self):
         self.bitmap = Image.new(mode="RGBA", size=(1,1), color="white")

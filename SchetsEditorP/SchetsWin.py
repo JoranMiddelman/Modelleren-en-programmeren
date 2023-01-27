@@ -1,25 +1,23 @@
-from tkinter       import Toplevel, Menu, Frame, Label, Button, Radiobutton, Listbox, IntVar, ttk
+from tkinter       import Toplevel, Menu, Frame, Label, Button, Radiobutton, Listbox, IntVar, ttk, messagebox, filedialog
 from PIL.ImageTk   import PhotoImage
 from PIL           import Image
 from SchetsControl import SchetsControl
-
-# subklasses OvaalTool() VolOvaalTool() importeren
-from Tools         import PenTool, LijnTool, RechthoekTool, VolRechthoekTool, TekstTool, GumTool, OvaalTool, VolOvaalTool
+from Tools         import PenTool, LijnTool, RechthoekTool, VolRechthoekTool, TekstTool, GumTool, OvaalTool, VolOvaalTool # Ovaaltool en vololvaaltool importeren
 
 class SchetsWin(Toplevel):
     def __init__(self,parent):
         super().__init__(parent)
-        # Groter maken om alles in een scherm te krijgen
+        
+        # scherm groter maken zodat alles in een scherm past
         self.geometry("1000x800")
 
-        # toevoegen van OvaalTool() en VolOvaalTool() aan deTools lijst om te laten verschijnen op scherm
-        deTools = [PenTool(), LijnTool(), RechthoekTool(), VolRechthoekTool(), TekstTool(), GumTool(), OvaalTool(), VolOvaalTool()]
+        deTools = [PenTool(), LijnTool(), RechthoekTool(), VolRechthoekTool(), TekstTool(), GumTool(), OvaalTool(), VolOvaalTool()] # Ovaaltool en vololvaaltool toevoegen aan de lijst van tools
         deKleuren = ["black", "red", "green", "blue", "yellow", "magenta", "cyan"]
 
         self.huidigeTool = deTools[0]
 
         paneel = Frame(self)
-        paneel.pack(side="left", padx=10)
+        paneel.pack(side="left", padx=0) # van 10 naar 0 verandert zodat alles op scherm past 
 
         self.schetscontrol = SchetsControl(self)
         self.schetscontrol.pack(fill="both", expand=True)
@@ -37,7 +35,25 @@ class SchetsWin(Toplevel):
         self.configure(menu=menubar)
 
         self.vast = False
-
+        
+        self.opgeslagen = False
+        
+        # Declaratie van membervariabele van lijst
+        # self.elementen_lijst = list()
+        # self.elementen_lijst.append() # Als je methode aanroept om te tekenen dan moet je een element toevoegen aan deze lijst
+        
+        # Protocol zorgt ervoor dat de window sluit als het door de "Close Window button" is gedaan. Roept dan een functie op om de bestand op te slaan.
+        self.protocol("WM_DELETE_WINDOW", self.sluiten)
+        
+    def sluiten(self):
+        if not self.opgeslagen:
+            antwoord = messagebox.askyesno("Afsluiten", "Wil je afsluiten zonder op te slaan?")
+            if antwoord == True:
+                self.destroy()
+            elif antwoord == False:
+                self.schetscontrol.Opslaan()
+                self.destroy()
+    
     def mousedown(self, ea):
         self.vast = True
         self.huidigeTool.MuisVast(self.schetscontrol, (ea.x, ea.y))
@@ -69,7 +85,8 @@ class SchetsWin(Toplevel):
 
     def maakFileMenu(self, menubar):
         menu = Menu(menubar, tearoff=0)
-        menu.add_command(label="Sluiten", command=self.destroy)
+        # menu.add_command(label="Sluiten", command=self.destroy)
+        menu.add_command(label="Sluiten", command=self.sluiten)
         menubar.add_cascade(label="File", menu=menu)
 
     def maakToolMenu(self, menubar, tools):
@@ -105,7 +122,7 @@ class SchetsWin(Toplevel):
         roteer = Button(box, text="Rotate", command=self.schetscontrol.Roteer)
         roteer.pack(pady=5)
         
-        # toevoegen van opslaan en exporteren van plaatje naar bureaublad
+        # Maak opslaan button 
         Opslaan = Button(box, text="Opslaan", command=self.schetscontrol.Opslaan)
         Opslaan.pack(pady=5)
 

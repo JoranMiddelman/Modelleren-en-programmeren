@@ -118,7 +118,7 @@ class GumTool(PenTool):
     def Bezig(self, draw, p1, p2):
         draw.line((p1,p2), fill="white", width=7)
         
-    # Het toevoegen van een nieuwe class voor het maken van een eerst open en dan een gevulde ovaal
+ # Het toevoegen van een nieuwe class voor het maken van een eerst open en dan een gevulde ovaal
 class OvaalTool(TweepuntTool):
     def __init__(self):
         super().__init__()
